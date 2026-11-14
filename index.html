@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1220">
+  <meta name="description" content="TRADE AI VISION — análise visual assistida de gráficos financeiros.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>TRADE AI VISION</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">TV</div>
+        <div><strong>TRADE AI <span>VISION</span></strong><small>ANÁLISE VISUAL DE MERCADO</small></div>
+      </div>
+      <div class="status-pill"><i></i> MOTOR LOCAL</div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">CENTRAL DE ANÁLISE · V1.0</p>
+          <h1>Enxergue o gráfico.<br><em>Entenda a pressão.</em></h1>
+          <p class="sub">Capture a tela ou use a câmera para examinar o comportamento visual dos candles.</p>
+        </div>
+        <div class="shield">AI<br><small>VISION</small></div>
+      </section>
+
+      <section class="panel capture-panel">
+        <div class="section-head">
+          <div><span class="step">01</span><h2>Captura do gráfico</h2></div>
+          <span class="tag">CÂMERA + IMAGEM</span>
+        </div>
+        <div class="capture-actions">
+          <button class="btn btn-primary" id="startCamera">◉ Abrir câmera</button>
+          <label class="btn btn-secondary file-btn">＋ Enviar print<input id="imageInput" type="file" accept="image/*"></label>
+          <button class="btn btn-ghost" id="stopCamera" disabled>Parar</button>
+        </div>
+        <div class="preview-wrap">
+          <div class="preview-top"><span id="sourceLabel">AGUARDANDO CAPTURA</span><span id="roiLabel">ÁREA PADRÃO</span></div>
+          <div class="preview-stage" id="previewStage">
+            <video id="cameraVideo" autoplay playsinline muted></video>
+            <canvas id="previewCanvas" aria-label="Prévia do gráfico; arraste para selecionar a área de análise"></canvas>
+            <div class="empty-state" id="emptyState"><div class="scan-icon">⌗</div><strong>Seu gráfico aparecerá aqui</strong><span>Abra a câmera ou envie uma captura de tela.</span></div>
+            <div class="scan-corner c1"></div><div class="scan-corner c2"></div>
+            <div class="scan-corner c3"></div><div class="scan-corner c4"></div>
+          </div>
+          <div class="preview-help">Dica: arraste sobre o gráfico para delimitar a região dos candles. Evite incluir menus e botões.</div>
+        </div>
+        <div class="capture-meta">
+          <label>Mercado
+            <select id="marketType">
+              <option value="Cripto">Criptomoedas</option>
+              <option value="Forex">Forex</option>
+              <option value="Ações">Ações</option>
+              <option value="Índices">Índices</option>
+              <option value="Commodities">Commodities</option>
+              <option value="Outro">Outro / OTC</option>
+            </select>
+          </label>
+          <label>Ativo
+            <input id="assetName" type="text" value="BTC / USD" placeholder="Ex.: BTC/USD, EUR/USD">
+          </label>
+          <label>Período do gráfico
+            <select id="candlePeriod">
+              <option value="1m">1 minuto</option><option value="5m">5 minutos</option>
+              <option value="15m">15 minutos</option><option value="30m">30 minutos</option>
+              <option value="1h">1 hora</option><option value="unknown">Não identificado</option>
+            </select>
+          </label>
+        </div>
+        <div class="action-row">
+          <button class="btn btn-outline" id="resetArea">↺ Redefinir área</button>
+          <button class="btn btn-primary analyze-btn" id="analyzeBtn" disabled>ANALISAR GRÁFICO <span>→</span></button>
+        </div>
+        <p class="privacy-note">🔒 A análise visual é processada localmente neste aparelho. A imagem não é enviada a um servidor.</p>
+      </section>
+
+      <section class="panel results-panel" id="resultsPanel">
+        <div class="section-head">
+          <div><span class="step">02</span><h2>Leitura do mercado</h2></div>
+          <span class="tag" id="analysisStatus">AGUARDANDO</span>
+        </div>
+        <div class="result-main" id="resultMain">
+          <div class="result-symbol">⌁</div>
+          <div><strong>Aguardando análise</strong><p>Faça uma captura para identificar a pressão visual dos candles.</p></div>
+        </div>
+        <div class="metrics">
+          <div class="metric"><small>VELAS / PIXELS VERDES</small><strong id="greenMetric">—</strong><div class="meter"><i id="greenMeter"></i></div></div>
+          <div class="metric"><small>VELAS / PIXELS VERMELHOS</small><strong id="redMetric">—</strong><div class="meter red"><i id="redMeter"></i></div></div>
+          <div class="metric"><small>LEITURA DA REGIÃO</small><strong id="trendMetric">—</strong></div>
+        </div>
+        <h3 class="horizon-title">Horizontes solicitados</h3>
+        <div class="horizon-grid" id="horizonGrid">
+          <div class="horizon"><small>1 MIN</small><b>—</b><span>Aguardando</span></div>
+          <div class="horizon"><small>2 MIN</small><b>—</b><span>Aguardando</span></div>
+          <div class="horizon"><small>3 MIN</small><b>—</b><span>Aguardando</span></div>
+          <div class="horizon"><small>4 MIN</small><b>—</b><span>Aguardando</span></div>
+          <div class="horizon"><small>5 MIN</small><b>—</b><span>Aguardando</span></div>
+        </div>
+        <div class="explanation" id="explanation"><strong>Como interpretar</strong><p>O sistema mede cores e distribuição visual na área selecionada. Isso não equivale a uma previsão estatística de preço nem substitui dados de mercado em tempo real.</p></div>
+      </section>
+
+      <section class="panel history-panel">
+        <div class="section-head"><div><span class="step">03</span><h2>Histórico de análises</h2></div><button class="text-btn" id="clearHistory">Limpar</button></div>
+        <div id="historyList" class="history-list"><div class="history-empty">Nenhuma análise registrada ainda.</div></div>
+      </section>
+
+      <section class="warning">
+        <strong>⚠️ Aviso de risco</strong>
+        <p>Este aplicativo é uma ferramenta experimental de leitura visual. Não envia ordens, não acessa sua corretora e não garante movimentos de alta ou baixa. Capturas podem conter ruído, cores personalizadas e elementos que confundem a análise. Teste em conta demo e nunca arrisque dinheiro que não pode perder.</p>
+      </section>
+    </main>
+    <footer>TRADE AI VISION <span>·</span> VERSÃO 1.0 <span>·</span> FERRAMENTA EXPERIMENTAL</footer>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
